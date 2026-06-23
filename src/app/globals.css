@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+@theme {
+  --color-charcoal: #121212;
+  --color-card: #1E1E1E;
+  --color-primary: #22C55E;
+  --color-featured: #F59E0B;
+  --color-gray-800: #1F2937;
+  
+  --color-background: var(--color-charcoal);
+  --color-foreground: #F3F4F6; /* light gray for text */
+}
+
+@layer base {
+  *, ::before, ::after {
+    border-color: var(--color-gray-800);
+  }
+  
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  }
+
+  /* Focus visible state overrides for flat accessibility */
+  *:focus-visible {
+    outline: 2px solid var(--color-primary) !important;
+    outline-offset: 0px !important;
+  }
+
+  /* No smooth/pulsing transitions on hover by default */
+  a, button {
+    transition: none !important;
+  }
+}
