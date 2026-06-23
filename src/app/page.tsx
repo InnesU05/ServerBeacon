@@ -37,10 +37,10 @@ export default async function Home({
             </h2>
           </div>
           
-          {/* Horizontal Scroll Container for Featured */}
-          <div className="flex overflow-x-auto pb-6 -mx-4 px-4 sm:mx-0 sm:px-0 hide-scrollbar snap-x snap-mandatory gap-6">
+          {/* Vertical Stack on Mobile, Horizontal Scroll Container for Featured on Desktop */}
+          <div className="flex flex-col sm:flex-row sm:overflow-x-auto pb-6 sm:-mx-4 sm:px-4 md:mx-0 md:px-0 sm:hide-scrollbar sm:snap-x sm:snap-mandatory gap-4 sm:gap-6">
             {featuredServers.map(server => (
-              <div key={server.id} className="min-w-[85vw] sm:min-w-[400px] md:min-w-[500px] shrink-0 snap-center">
+              <div key={server.id} className="w-full sm:min-w-[400px] md:min-w-[500px] sm:shrink-0 sm:snap-center">
                 <ServerCard server={server} />
               </div>
             ))}
