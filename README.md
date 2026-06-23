@@ -1,36 +1,45 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ServerBeacon
 
-## Getting Started
+ServerBeacon is a curated Minecraft Server Directory built with Next.js (App Router), Tailwind CSS, and Supabase. It is designed to be highly SEO and GEO-optimised.
 
-First, run the development server:
+## Local Development Setup
+
+### Prerequisites
+
+Ensure you have Node.js and npm installed. The Vercel and Supabase CLIs are installed as local dependencies.
+
+### 1. Install Dependencies
+
+```bash
+npm install
+```
+
+### 2. Vercel & Supabase CLI Setup
+
+The CLIs are installed locally in this project (`package.json`), meaning they are scoped directly to this directory and version-controlled. Use `npx` to execute them.
+
+**Link Vercel:**
+1. Run `npx vercel login` and follow the authentication steps in your browser.
+2. Run `npx vercel link` to connect this local directory to your existing Vercel project (where Upstash Redis and Supabase integrations are configured).
+3. Run `npx vercel env pull .env.local` to securely pull your environment variables down to your machine.
+
+**Link Supabase:**
+1. Run `npx supabase login` and generate/provide your access token.
+2. Run `npx supabase link --project-ref your-project-ref` (replace `your-project-ref` with your Supabase project ID).
+3. Ensure the database schema is applied. You can run the schema found in `database/schema.sql` via the Supabase dashboard's SQL Editor, or use the Supabase CLI if you have migrations set up.
+
+### 3. Start the Development Server
+
+Run the development server natively on Windows:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Architecture
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **`app/`**: Next.js App Router containing static and dynamic SEO pages (`/category`, `/location`, `/server`).
+- **`components/`**: Reusable React components styled with strict Tailwind rules (flat colours, hard borders).
+- **`database/`**: Contains the SQL schema for Supabase (`servers` and `submissions` tables).
