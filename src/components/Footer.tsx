@@ -9,25 +9,32 @@ export default function Footer() {
             <span className="text-2xl font-black text-white tracking-tighter uppercase block mb-4">
               Server<span className="text-primary">Beacon</span>
             </span>
-            <p className="text-gray-400 text-sm">
+            <p className="text-gray-400 text-sm leading-relaxed mb-4">
               The premier curated directory for Minecraft servers.
               Optimised for discovery, built for community.
             </p>
+            <p className="text-gray-500 text-xs leading-relaxed">
+              Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft.
+            </p>
           </div>
           <div>
-            <h3 className="text-white font-bold mb-4 uppercase tracking-wider text-sm">Categories</h3>
-            <ul className="space-y-2">
-              <li><Link href="/category/survival" className="text-gray-400 hover:text-white text-sm">Survival</Link></li>
-              <li><Link href="/category/skyblock" className="text-gray-400 hover:text-white text-sm">Skyblock</Link></li>
-              <li><Link href="/category/minigames" className="text-gray-400 hover:text-white text-sm">Minigames</Link></li>
+            <h3 className="text-white font-bold mb-4 uppercase tracking-wider text-sm">Legal</h3>
+            <ul className="space-y-3">
+              <li><Link href="/terms" className="text-gray-400 hover:text-white text-sm transition-colors">Terms of Service</Link></li>
+              <li><Link href="/privacy" className="text-gray-400 hover:text-white text-sm transition-colors">Privacy Policy</Link></li>
             </ul>
           </div>
           <div>
-            <h3 className="text-white font-bold mb-4 uppercase tracking-wider text-sm">Locations</h3>
-            <ul className="space-y-2">
-              <li><Link href="/location/us" className="text-gray-400 hover:text-white text-sm">United States</Link></li>
-              <li><Link href="/location/eu" className="text-gray-400 hover:text-white text-sm">Europe</Link></li>
-              <li><Link href="/location/au" className="text-gray-400 hover:text-white text-sm">Australia</Link></li>
+            <h3 className="text-white font-bold mb-4 uppercase tracking-wider text-sm">Contact & Business</h3>
+            <ul className="space-y-3">
+              <li className="text-gray-400 text-sm">
+                <span className="block text-gray-500 text-xs uppercase tracking-wider mb-1">Email</span>
+                <a href="mailto:innes.urquhart4@gmail.com" className="hover:text-white transition-colors">innes.urquhart4@gmail.com</a>
+              </li>
+              <li className="text-gray-400 text-sm">
+                <span className="block text-gray-500 text-xs uppercase tracking-wider mb-1">TikTok Enquiries</span>
+                <a href="https://tiktok.com/@aegon205" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">@aegon205</a>
+              </li>
             </ul>
           </div>
         </div>
