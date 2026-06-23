@@ -61,6 +61,7 @@ export default async function ServerPage({ params }: { params: Promise<{ slug: s
               src={server.image_url} 
               alt={`${server.name} promotional banner`} 
               className="w-full h-full object-cover"
+              referrerPolicy="no-referrer"
             />
           </div>
         )}
@@ -69,7 +70,7 @@ export default async function ServerPage({ params }: { params: Promise<{ slug: s
           <div className="flex flex-col md:flex-row items-start md:items-center gap-8 mb-8 border-b border-gray-800 pb-8">
             {/* Square Logo */}
             {squareIconUrl ? (
-              <img src={squareIconUrl} alt={`${server.name} icon`} className="w-24 h-24 sm:w-32 sm:h-32 object-cover border border-gray-800 flex-shrink-0 bg-charcoal" />
+              <img src={squareIconUrl} alt={`${server.name} icon`} className="w-24 h-24 sm:w-32 sm:h-32 object-cover border border-gray-800 flex-shrink-0 bg-charcoal" referrerPolicy="no-referrer" />
             ) : (
               <div className="w-24 h-24 sm:w-32 sm:h-32 bg-charcoal border border-gray-800 flex items-center justify-center flex-shrink-0">
                 <span className="text-gray-500 font-bold text-4xl">{server.name.substring(0, 2).toUpperCase()}</span>

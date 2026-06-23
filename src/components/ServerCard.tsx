@@ -28,9 +28,8 @@ export default function ServerCard({ server }: { server: Server }) {
     }
   };
 
-  // Determine the best image to show. 
-  // Fallback to the live API icon if an IP is provided.
-  const imageUrl = server.image_url || (server.ip_address ? `https://api.mcsrvstat.us/icon/${server.ip_address}` : null);
+  // The card should only display the square icon, never the wide promotional banner.
+  const iconUrl = server.ip_address ? `https://api.mcsrvstat.us/icon/${server.ip_address}` : null;
 
   return (
     <div className={`relative bg-card border border-gray-800 flex flex-col transition-all duration-200 hover:border-gray-500 group h-full ${server.is_featured ? 'border-featured hover:border-featured/80' : ''}`}>
@@ -42,8 +41,8 @@ export default function ServerCard({ server }: { server: Server }) {
       <div className="p-4 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 flex-grow relative z-10 pointer-events-none">
         
         <div className="flex items-center space-x-4 w-full sm:w-auto">
-          {imageUrl ? (
-            <img src={imageUrl} alt={`${server.name} logo`} className="w-16 h-16 sm:w-20 sm:h-20 object-cover border border-gray-800 shrink-0 bg-charcoal" />
+          {iconUrl ? (
+            <img src={iconUrl} alt={`${server.name} logo`} className="w-16 h-16 sm:w-20 sm:h-20 object-cover border border-gray-800 shrink-0 bg-charcoal" referrerPolicy="no-referrer" />
           ) : (
             <div className="w-16 h-16 sm:w-20 sm:h-20 bg-charcoal border border-gray-800 flex items-center justify-center shrink-0">
               <span className="text-gray-500 font-bold text-xl">{server.name.substring(0, 2).toUpperCase()}</span>
