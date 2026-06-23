@@ -49,29 +49,29 @@ export default async function Home({
       )}
 
       <div>
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4 border-b border-gray-800 pb-6">
-          <h2 className="text-xl sm:text-2xl font-bold text-white uppercase tracking-wider flex items-center">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 gap-4 border-b border-gray-800 pb-6">
+          <h2 className="text-xl sm:text-2xl font-bold text-white uppercase tracking-wider flex items-center shrink-0">
             <span className="w-3 h-3 bg-gray-600 mr-3 block"></span>
             SERVER DIRECTORY
           </h2>
           
           {/* Filter Bar */}
-          <div className="flex bg-charcoal border border-gray-800 w-full sm:w-auto">
+          <div className="flex bg-charcoal border border-gray-800 w-full overflow-x-auto hide-scrollbar md:w-auto shrink-0">
             <Link 
               href="/"
-              className={`flex-1 sm:flex-none px-6 py-2 text-sm font-bold uppercase tracking-wider text-center border-r border-gray-800 transition-none ${!editionParam ? 'bg-primary text-black' : 'text-gray-400 hover:text-white hover:bg-gray-800'}`}
+              className={`flex-1 md:flex-none px-4 sm:px-6 py-3 md:py-2 text-xs sm:text-sm font-bold uppercase tracking-wider text-center border-r border-gray-800 transition-none whitespace-nowrap ${!editionParam ? 'bg-primary text-black' : 'text-gray-400 hover:text-white hover:bg-gray-800'}`}
             >
               All
             </Link>
             <Link 
               href="/?edition=java"
-              className={`flex-1 sm:flex-none px-6 py-2 text-sm font-bold uppercase tracking-wider text-center border-r border-gray-800 transition-none ${editionParam === 'java' ? 'bg-primary text-black' : 'text-gray-400 hover:text-white hover:bg-gray-800'}`}
+              className={`flex-1 md:flex-none px-4 sm:px-6 py-3 md:py-2 text-xs sm:text-sm font-bold uppercase tracking-wider text-center border-r border-gray-800 transition-none whitespace-nowrap ${editionParam === 'java' ? 'bg-primary text-black' : 'text-gray-400 hover:text-white hover:bg-gray-800'}`}
             >
               Java
             </Link>
             <Link 
               href="/?edition=bedrock"
-              className={`flex-1 sm:flex-none px-6 py-2 text-sm font-bold uppercase tracking-wider text-center transition-none ${editionParam === 'bedrock' ? 'bg-primary text-black' : 'text-gray-400 hover:text-white hover:bg-gray-800'}`}
+              className={`flex-1 md:flex-none px-4 sm:px-6 py-3 md:py-2 text-xs sm:text-sm font-bold uppercase tracking-wider text-center transition-none whitespace-nowrap ${editionParam === 'bedrock' ? 'bg-primary text-black' : 'text-gray-400 hover:text-white hover:bg-gray-800'}`}
             >
               Bedrock
             </Link>

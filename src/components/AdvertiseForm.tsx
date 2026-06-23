@@ -35,7 +35,7 @@ export default function AdvertiseForm() {
   };
 
   return (
-    <div className="bg-card border border-gray-800 p-8 max-w-2xl mx-auto">
+    <div className="bg-card border border-gray-800 p-5 sm:p-8 max-w-2xl mx-auto">
       <h2 className="text-2xl font-bold text-white mb-6 uppercase tracking-tight">Submit Your Server</h2>
       
       {status === 'success' && (

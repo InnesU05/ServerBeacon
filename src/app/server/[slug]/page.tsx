@@ -73,8 +73,8 @@ export default async function ServerPage({ params }: { params: Promise<{ slug: s
           </div>
         )}
 
-        <div className="p-8 md:p-12">
-          <div className="flex flex-col md:flex-row items-start md:items-center gap-8 mb-8 border-b border-gray-800 pb-8">
+        <div className="p-6 sm:p-8 md:p-12">
+          <div className="flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-8 mb-8 border-b border-gray-800 pb-8 text-center md:text-left">
             {/* Square Logo */}
             {squareIconUrl ? (
               <img src={squareIconUrl} alt={`${server.name} icon`} className="w-24 h-24 sm:w-32 sm:h-32 object-cover border border-gray-800 flex-shrink-0 bg-charcoal" />
@@ -84,35 +84,35 @@ export default async function ServerPage({ params }: { params: Promise<{ slug: s
               </div>
             )}
             
-            <div className="flex-grow">
-              <div className="flex items-center mb-2">
-                <h1 className="text-4xl font-bold text-white uppercase tracking-tight">{server.name}</h1>
+            <div className="flex-grow flex flex-col items-center md:items-start">
+              <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 mb-2">
+                <h1 className="text-3xl sm:text-4xl font-bold text-white uppercase tracking-tight">{server.name}</h1>
                 {server.is_featured && (
-                  <span className="bg-featured text-black text-xs font-bold px-3 py-1 uppercase tracking-wider ml-4">
+                  <span className="bg-featured text-black text-xs font-bold px-3 py-1 uppercase tracking-wider">
                     Featured
                   </span>
                 )}
               </div>
               
-              <div className="flex flex-wrap items-center gap-3 mt-4">
+              <div className="flex flex-wrap justify-center md:justify-start items-center gap-2 sm:gap-3 mt-4">
                 {server.ip_address && (
                   <LiveServerBadge ip={server.ip_address} edition={server.edition} />
                 )}
-                <span className="text-gray-400 text-sm uppercase tracking-wider border border-gray-800 px-3 py-1 bg-charcoal">
+                <span className="text-gray-400 text-[10px] sm:text-sm uppercase tracking-wider border border-gray-800 px-2 sm:px-3 py-1 bg-charcoal">
                   {server.edition}
                 </span>
-                <span className="text-gray-400 text-sm uppercase tracking-wider border border-gray-800 px-3 py-1 bg-charcoal">
+                <span className="text-gray-400 text-[10px] sm:text-sm uppercase tracking-wider border border-gray-800 px-2 sm:px-3 py-1 bg-charcoal">
                   {server.geo_region.toUpperCase()}
                 </span>
                 {server.category_tags.map(tag => (
-                  <span key={tag} className="text-gray-500 text-xs uppercase tracking-wider border border-gray-800 px-2 py-1">
+                  <span key={tag} className="text-gray-500 text-[10px] sm:text-xs uppercase tracking-wider border border-gray-800 px-2 py-1">
                     {tag}
                   </span>
                 ))}
               </div>
             </div>
             
-            <div className="flex-shrink-0 w-full md:w-auto">
+            <div className="flex-shrink-0 w-full sm:w-auto mt-4 md:mt-0 flex justify-center">
               <DetailedVoteButtons serverId={server.id} initialVotes={server.votes} />
             </div>
           </div>

@@ -39,61 +39,63 @@ export default function ServerCard({ server }: { server: Server }) {
       <Link href={`/server/${server.slug}`} className="absolute inset-0 z-0" aria-label={`View details for ${server.name}`}></Link>
       
       {/* Header / Preview Section */}
-      <div className="p-4 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 flex-grow relative z-10 pointer-events-none">
+      <div className="flex flex-row items-stretch p-3 sm:p-5 gap-3 sm:gap-5 flex-grow relative z-10 pointer-events-none h-full">
         
-        <div className="flex items-center space-x-4 w-full sm:w-auto">
+        {/* Logo */}
+        <div className="flex items-start sm:items-center shrink-0">
           {iconUrl ? (
-            <img src={iconUrl} alt={`${server.name} logo`} className="w-16 h-16 sm:w-20 sm:h-20 object-cover border border-gray-800 shrink-0 bg-charcoal" />
+            <img src={iconUrl} alt={`${server.name} logo`} className="w-14 h-14 sm:w-20 sm:h-20 object-cover border border-gray-800 bg-charcoal" />
           ) : (
-            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-charcoal border border-gray-800 flex items-center justify-center shrink-0">
-              <span className="text-gray-500 font-bold text-xl">{server.name.substring(0, 2).toUpperCase()}</span>
+            <div className="w-14 h-14 sm:w-20 sm:h-20 bg-charcoal border border-gray-800 flex items-center justify-center">
+              <span className="text-gray-500 font-bold text-lg sm:text-xl">{server.name.substring(0, 2).toUpperCase()}</span>
             </div>
           )}
+        </div>
+        
+        {/* Content */}
+        <div className="flex flex-col justify-center flex-grow min-w-0 py-1">
+          <h3 className="text-lg sm:text-xl font-bold text-white flex flex-wrap items-center gap-2 group-hover:text-primary transition-colors duration-200 leading-tight mb-1 sm:mb-2">
+            <span className="truncate">{server.name}</span>
+            {server.is_featured && (
+              <span className="bg-featured text-black text-[10px] sm:text-xs font-bold px-1.5 py-0.5 sm:px-2 sm:py-1 uppercase tracking-wider shrink-0 rounded-sm">
+                Featured
+              </span>
+            )}
+          </h3>
           
-          <div className="flex-grow min-w-0">
-            <h3 className="text-xl font-bold text-white flex flex-wrap items-center gap-2 group-hover:text-primary transition-colors duration-200">
-              <span className="truncate">{server.name}</span>
-              {server.is_featured && (
-                <span className="bg-featured text-black text-xs font-bold px-2 py-1 uppercase tracking-wider shrink-0">
-                  Featured
-                </span>
-              )}
-            </h3>
-            
-            <p className="text-gray-400 text-sm mt-1 line-clamp-1">{server.description}</p>
-            
-            <div className="flex flex-wrap items-center gap-2 mt-3">
-              {server.ip_address && (
-                <LiveServerBadge ip={server.ip_address} edition={server.edition} />
-              )}
-              <span className="text-gray-400 text-xs uppercase tracking-wider border border-gray-800 px-2 py-0.5 shrink-0 bg-charcoal">
-                {server.edition}
-              </span>
-              <span className="text-gray-400 text-xs uppercase tracking-wider border border-gray-800 px-2 py-0.5 shrink-0 bg-charcoal">
-                {server.geo_region}
-              </span>
-            </div>
+          <p className="text-gray-400 text-xs sm:text-sm line-clamp-1 sm:line-clamp-2 mb-2 sm:mb-3">{server.description}</p>
+          
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mt-auto">
+            {server.ip_address && (
+              <LiveServerBadge ip={server.ip_address} edition={server.edition} />
+            )}
+            <span className="text-gray-400 text-[10px] sm:text-xs uppercase tracking-wider border border-gray-800 px-1.5 py-0.5 shrink-0 bg-charcoal">
+              {server.edition}
+            </span>
+            <span className="text-gray-400 text-[10px] sm:text-xs uppercase tracking-wider border border-gray-800 px-1.5 py-0.5 shrink-0 bg-charcoal hidden sm:inline-block">
+              {server.geo_region}
+            </span>
           </div>
         </div>
 
         {/* Voting Section (Z-10, Pointer events enabled so it intercepts clicks) */}
-        <div className="flex flex-row sm:flex-col items-center justify-between sm:justify-center w-full sm:w-auto bg-charcoal border border-gray-800 p-2 sm:p-3 shrink-0 pointer-events-auto">
+        <div className="flex flex-col items-center justify-center w-10 sm:w-16 bg-charcoal border border-gray-800 shrink-0 pointer-events-auto ml-1 sm:ml-2">
           <button 
             onClick={(e) => handleVote(e, 'upvote')}
-            className="text-gray-400 hover:text-primary transition-colors p-1"
+            className="text-gray-400 hover:text-primary transition-colors p-2 w-full flex justify-center"
             title="Upvote"
           >
-            ▲
+            <span className="text-sm sm:text-base leading-none">▲</span>
           </button>
-          <span className="font-black text-white text-lg sm:text-xl my-0 sm:my-1 px-4 sm:px-0">
+          <span className="font-black text-white text-sm sm:text-lg my-1 text-center w-full">
             {localVotes}
           </span>
           <button 
             onClick={(e) => handleVote(e, 'downvote')}
-            className="text-gray-400 hover:text-red-500 transition-colors p-1"
+            className="text-gray-400 hover:text-red-500 transition-colors p-2 w-full flex justify-center"
             title="Downvote"
           >
-            ▼
+            <span className="text-sm sm:text-base leading-none">▼</span>
           </button>
         </div>
       </div>
