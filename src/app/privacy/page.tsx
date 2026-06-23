@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy | ServerBeacon',
@@ -8,6 +9,12 @@ export const metadata: Metadata = {
 export default function PrivacyPolicy() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <Link href="/" className="inline-flex items-center text-gray-400 hover:text-white mb-8 transition-colors font-bold uppercase tracking-wider text-sm">
+        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Back to Directory
+      </Link>
       <div className="bg-card border border-gray-800 p-8 md:p-12 mb-8 prose prose-invert max-w-none">
         <h1 className="text-4xl font-black text-white uppercase tracking-tight mb-8 border-b border-gray-800 pb-4">
           Privacy Policy

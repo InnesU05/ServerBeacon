@@ -3,13 +3,16 @@
 import { supabase } from '@/lib/supabase';
 import { Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
-import { headers } from 'next/headers';
+import { headers, cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
 
-// Limit to 1 vote per server per IP per 24 hours
-const ratelimit = process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN
+// Support both Upstash integration and Vercel KV
+const redisUrl = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
+const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
+
+const ratelimit = redisUrl && redisToken
   ? new Ratelimit({
-      redis: Redis.fromEnv(),
+      redis: new Redis({ url: redisUrl, token: redisToken }),
       limiter: Ratelimit.slidingWindow(1, '24 h'),
       analytics: true,
     })
@@ -17,9 +20,19 @@ const ratelimit = process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDI
 
 export async function voteServerAction(serverId: string, type: 'upvote' | 'downvote') {
   try {
+    // 1. Client Cookie check (fast, stops 99% of casual spam)
+    const cookieStore = await cookies();
+    const cookieName = `voted_${serverId}`;
+    if (cookieStore.get(cookieName)) {
+      return { success: false, error: 'You have already voted for this server today.' };
+    }
+
+    // 2. Upstash Redis IP check (stops advanced spam)
     if (ratelimit) {
       const headersList = await headers();
-      const ip = headersList.get('x-forwarded-for') || '127.0.0.1';
+      const forwardedFor = headersList.get('x-forwarded-for') || '127.0.0.1';
+      // Handle comma-separated IPs from proxies
+      const ip = forwardedFor.split(',')[0].trim();
       
       const { success } = await ratelimit.limit(`vote_${serverId}_${ip}`);
       if (!success) {
@@ -39,6 +52,9 @@ export async function voteServerAction(serverId: string, type: 'upvote' | 'downv
       console.error('Database voting error:', error);
       return { success: false, error: 'Failed to record vote. Please try again.' };
     }
+
+    // Set a 24-hour cookie to prevent further voting
+    cookieStore.set(cookieName, 'true', { maxAge: 60 * 60 * 24 });
 
     revalidatePath('/');
     return { success: true };

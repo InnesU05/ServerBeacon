@@ -25,17 +25,10 @@ export default function Footer() {
             </ul>
           </div>
           <div>
-            <h3 className="text-white font-bold mb-4 uppercase tracking-wider text-sm">Contact & Business</h3>
-            <ul className="space-y-3">
-              <li className="text-gray-400 text-sm">
-                <span className="block text-gray-500 text-xs uppercase tracking-wider mb-1">Email</span>
-                <a href="mailto:innes.urquhart4@gmail.com" className="hover:text-white transition-colors">innes.urquhart4@gmail.com</a>
-              </li>
-              <li className="text-gray-400 text-sm">
-                <span className="block text-gray-500 text-xs uppercase tracking-wider mb-1">TikTok Enquiries</span>
-                <a href="https://tiktok.com/@aegon205" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">@aegon205</a>
-              </li>
-            </ul>
+            <h3 className="text-white font-bold mb-4 uppercase tracking-wider text-sm">Contact</h3>
+            <p className="text-gray-400 text-sm leading-relaxed">
+              For business enquiries, message <a href="https://tiktok.com/@aegon205" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">@aegon205</a> on TikTok.
+            </p>
           </div>
         </div>
         <div className="mt-12 pt-8 border-t border-gray-800 text-center">
