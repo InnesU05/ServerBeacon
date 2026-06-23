@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { supabase } from '@/lib/supabase';
 
 export default function AdvertiseForm() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
@@ -9,11 +10,26 @@ export default function AdvertiseForm() {
     e.preventDefault();
     setStatus('loading');
     
-    // Simulate API call for Supabase submission
-    setTimeout(() => {
+    const formData = new FormData(e.currentTarget);
+    const data = {
+      name: formData.get('name') as string,
+      email: formData.get('email') as string,
+      description: formData.get('description') as string,
+      category: formData.get('category') as string,
+      location: formData.get('location') as string,
+      discord_link: formData.get('discord') as string,
+      image_url: formData.get('image') as string,
+    };
+
+    const { error } = await supabase.from('submissions').insert([data]);
+
+    if (error) {
+      console.error('Submission error:', error);
+      setStatus('error');
+    } else {
       setStatus('success');
       (e.target as HTMLFormElement).reset();
-    }, 1000);
+    }
   };
 
   return (
@@ -39,6 +55,7 @@ export default function AdvertiseForm() {
             <input 
               type="text" 
               id="name" 
+              name="name"
               required 
               className="w-full bg-charcoal border border-gray-800 text-white px-4 py-3 focus:outline-none focus:border-primary transition-none"
               placeholder="e.g. Hypixel"
@@ -49,6 +66,7 @@ export default function AdvertiseForm() {
             <input 
               type="email" 
               id="email" 
+              name="email"
               required 
               className="w-full bg-charcoal border border-gray-800 text-white px-4 py-3 focus:outline-none focus:border-primary transition-none"
               placeholder="admin@example.com"
@@ -60,6 +78,7 @@ export default function AdvertiseForm() {
           <label htmlFor="description" className="block text-white font-bold text-sm mb-2 uppercase tracking-wide">Description *</label>
           <textarea 
             id="description" 
+            name="description"
             required 
             rows={4}
             className="w-full bg-charcoal border border-gray-800 text-white px-4 py-3 focus:outline-none focus:border-primary transition-none resize-none"
@@ -72,6 +91,7 @@ export default function AdvertiseForm() {
             <label htmlFor="category" className="block text-white font-bold text-sm mb-2 uppercase tracking-wide">Primary Category *</label>
             <select 
               id="category" 
+              name="category"
               required
               className="w-full bg-charcoal border border-gray-800 text-white px-4 py-3 focus:outline-none focus:border-primary transition-none appearance-none"
             >
@@ -88,6 +108,7 @@ export default function AdvertiseForm() {
             <label htmlFor="location" className="block text-white font-bold text-sm mb-2 uppercase tracking-wide">Location *</label>
             <select 
               id="location" 
+              name="location"
               required
               className="w-full bg-charcoal border border-gray-800 text-white px-4 py-3 focus:outline-none focus:border-primary transition-none appearance-none"
             >
@@ -106,6 +127,7 @@ export default function AdvertiseForm() {
             <input 
               type="url" 
               id="discord" 
+              name="discord"
               className="w-full bg-charcoal border border-gray-800 text-white px-4 py-3 focus:outline-none focus:border-primary transition-none"
               placeholder="https://discord.gg/..."
             />
@@ -115,6 +137,7 @@ export default function AdvertiseForm() {
             <input 
               type="url" 
               id="image" 
+              name="image"
               className="w-full bg-charcoal border border-gray-800 text-white px-4 py-3 focus:outline-none focus:border-primary transition-none"
               placeholder="https://..."
             />
