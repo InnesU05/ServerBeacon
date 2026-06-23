@@ -9,6 +9,7 @@ export type Server = {
   geo_region: string;
   discord_link?: string;
   image_url?: string;
+  logo_url?: string;
   ip_address?: string;
   edition: ServerEdition;
   votes: number;

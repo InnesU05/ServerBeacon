@@ -47,21 +47,24 @@ export default async function ServerPage({ params }: { params: Promise<{ slug: s
   // Fetch live stats (MOTD, Players) if we have an IP
   const liveStats = server.ip_address ? await fetchServerLiveStats(server.ip_address, server.edition) : null;
   
-  // The square icon from the API
-  const squareIconUrl = server.ip_address ? `https://api.mcsrvstat.us/icon/${server.ip_address}` : null;
+  // The square icon from the API or custom logo
+  const rawSquareIconUrl = server.logo_url || (server.ip_address ? `https://api.mcsrvstat.us/icon/${server.ip_address}` : null);
+  
+  // Route external images through our proxy to bypass strict hotlink protections (e.g. Twitter/Cloudflare)
+  const bannerUrl = server.image_url ? `/api/proxy-image?url=${encodeURIComponent(server.image_url)}` : null;
+  const squareIconUrl = rawSquareIconUrl ? `/api/proxy-image?url=${encodeURIComponent(rawSquareIconUrl)}` : null;
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div className="bg-card border border-gray-800 mb-8 overflow-hidden">
         
         {/* Promotional Banner (if provided in database) */}
-        {server.image_url && (
+        {bannerUrl && (
           <div className="w-full h-48 sm:h-64 md:h-80 relative border-b border-gray-800 bg-charcoal">
             <img 
-              src={server.image_url} 
+              src={bannerUrl} 
               alt={`${server.name} promotional banner`} 
               className="w-full h-full object-cover"
-              referrerPolicy="no-referrer"
             />
           </div>
         )}
@@ -70,7 +73,7 @@ export default async function ServerPage({ params }: { params: Promise<{ slug: s
           <div className="flex flex-col md:flex-row items-start md:items-center gap-8 mb-8 border-b border-gray-800 pb-8">
             {/* Square Logo */}
             {squareIconUrl ? (
-              <img src={squareIconUrl} alt={`${server.name} icon`} className="w-24 h-24 sm:w-32 sm:h-32 object-cover border border-gray-800 flex-shrink-0 bg-charcoal" referrerPolicy="no-referrer" />
+              <img src={squareIconUrl} alt={`${server.name} icon`} className="w-24 h-24 sm:w-32 sm:h-32 object-cover border border-gray-800 flex-shrink-0 bg-charcoal" />
             ) : (
               <div className="w-24 h-24 sm:w-32 sm:h-32 bg-charcoal border border-gray-800 flex items-center justify-center flex-shrink-0">
                 <span className="text-gray-500 font-bold text-4xl">{server.name.substring(0, 2).toUpperCase()}</span>
