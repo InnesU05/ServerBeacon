@@ -93,9 +93,12 @@ export async function rejectSubmission(submissionId: string) {
 }
 
 // Active Server Management
-export async function toggleFeatured(serverId: string, currentState: boolean) {
+export async function toggleFeatured(formData: FormData) {
   if (!(await checkAdminAuth())) return { success: false, error: 'Unauthorized' };
   
+  const serverId = formData.get('id') as string;
+  const currentState = formData.get('currentState') === 'true';
+
   const { error } = await supabase.from('servers').update({ is_featured: !currentState }).eq('id', serverId);
   if (error) return { success: false, error: 'Failed to toggle featured status' };
   
@@ -104,12 +107,50 @@ export async function toggleFeatured(serverId: string, currentState: boolean) {
   return { success: true };
 }
 
-export async function deleteServer(serverId: string) {
+export async function deleteServer(formData: FormData) {
   if (!(await checkAdminAuth())) return { success: false, error: 'Unauthorized' };
   
+  const serverId = formData.get('id') as string;
+
   const { error } = await supabase.from('servers').delete().eq('id', serverId);
   if (error) return { success: false, error: 'Failed to delete server' };
   
+  revalidatePath('/');
+  revalidatePath('/admin');
+  return { success: true };
+}
+
+export async function updateServer(formData: FormData) {
+  if (!(await checkAdminAuth())) return { success: false, error: 'Unauthorized' };
+
+  const serverId = formData.get('id') as string;
+  const name = formData.get('name') as string;
+  const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+  
+  let category_tags: string[] = [];
+  try {
+    const tagsString = formData.get('category_tags_input') as string;
+    category_tags = tagsString ? [tagsString] : ['survival'];
+  } catch (e) {
+    category_tags = ['survival'];
+  }
+
+  const updatedServer = {
+    slug,
+    name,
+    description: formData.get('description') as string,
+    ip_address: formData.get('ip_address') as string,
+    discord_link: (formData.get('discord_link') as string) || null,
+    image_url: (formData.get('image_url') as string) || null,
+    logo_url: (formData.get('logo_url') as string) || null,
+    edition: formData.get('edition') as string,
+    geo_region: formData.get('geo_region') as string,
+    category_tags,
+  };
+
+  const { error } = await supabase.from('servers').update(updatedServer).eq('id', serverId);
+  if (error) return { success: false, error: 'Failed to update server' };
+
   revalidatePath('/');
   revalidatePath('/admin');
   return { success: true };

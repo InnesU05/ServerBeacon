@@ -1,7 +1,8 @@
-import { checkAdminAuth, authenticateAdmin, approveSubmission, rejectSubmission, toggleFeatured, deleteServer, manualAddServer, logoutAdmin } from '@/actions/admin';
+import { checkAdminAuth, authenticateAdmin, approveSubmission, rejectSubmission, manualAddServer, logoutAdmin } from '@/actions/admin';
 import { supabase } from '@/lib/supabase';
 import { Server, ServerSubmission } from '@/lib/types';
 import { revalidatePath } from 'next/cache';
+import AdminServerRow from '@/components/AdminServerRow';
 
 export const metadata = { title: 'Admin Dashboard | ServerBeacon' };
 
@@ -96,27 +97,7 @@ export default async function AdminPage() {
           <h2 className="text-xl font-bold text-white mb-4 uppercase tracking-wider border-l-4 border-featured pl-3">Active Servers</h2>
           <div className="space-y-4">
             {servers?.map(server => (
-              <div key={server.id} className={`bg-card border p-4 flex flex-col sm:flex-row justify-between items-center gap-4 ${server.is_featured ? 'border-featured bg-featured/5' : 'border-gray-800'}`}>
-                <div className="flex items-center gap-4 w-full sm:w-auto">
-                  <div className="w-12 h-12 bg-charcoal border border-gray-800 flex items-center justify-center shrink-0">
-                    <span className="text-gray-500 font-bold text-xs">{server.name.substring(0, 2).toUpperCase()}</span>
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-white">{server.name}</h3>
-                    <p className="text-xs text-gray-500">{server.ip_address} • {server.votes} Votes</p>
-                  </div>
-                </div>
-                <div className="flex gap-2 w-full sm:w-auto shrink-0">
-                  <form action={async () => { 'use server'; await toggleFeatured(server.id, server.is_featured); }}>
-                    <button type="submit" className={`px-4 py-2 text-xs font-bold uppercase tracking-wider border ${server.is_featured ? 'bg-featured text-black border-featured' : 'bg-transparent text-featured border-featured hover:bg-featured/10'}`}>
-                      {server.is_featured ? '★ Featured' : 'Make Featured'}
-                    </button>
-                  </form>
-                  <form action={async () => { 'use server'; await deleteServer(server.id); }}>
-                    <button type="submit" className="px-4 py-2 text-xs font-bold uppercase tracking-wider bg-transparent text-red-500 border border-red-500/50 hover:bg-red-500/10">Delete</button>
-                  </form>
-                </div>
-              </div>
+              <AdminServerRow key={server.id} server={server} />
             ))}
           </div>
         </div>
