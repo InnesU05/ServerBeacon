@@ -2,6 +2,8 @@ import { Metadata } from 'next';
 import { getServerBySlug } from '@/lib/data';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import LiveServerBadge from '@/components/LiveServerBadge';
+import DetailedVoteButtons from '@/components/DetailedVoteButtons';
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
@@ -27,12 +29,14 @@ export default async function ServerPage({ params }: { params: Promise<{ slug: s
     notFound();
   }
 
+  const imageUrl = server.image_url || (server.ip_address ? `https://api.mcsrvstat.us/icon/${server.ip_address}` : null);
+
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div className="bg-card border border-gray-800 p-8 md:p-12 mb-8">
         <div className="flex flex-col md:flex-row items-start md:items-center gap-8 mb-8 border-b border-gray-800 pb-8">
-          {server.image_url ? (
-            <img src={server.image_url} alt={`${server.name} logo`} className="w-32 h-32 object-cover border border-gray-800 flex-shrink-0" />
+          {imageUrl ? (
+            <img src={imageUrl} alt={`${server.name} logo`} className="w-32 h-32 object-cover border border-gray-800 flex-shrink-0 bg-charcoal" />
           ) : (
             <div className="w-32 h-32 bg-charcoal border border-gray-800 flex items-center justify-center flex-shrink-0">
               <span className="text-gray-500 font-bold text-4xl">{server.name.substring(0, 2).toUpperCase()}</span>
@@ -50,14 +54,14 @@ export default async function ServerPage({ params }: { params: Promise<{ slug: s
             </div>
             
             <div className="flex flex-wrap items-center gap-3 mt-4">
+              {server.ip_address && (
+                <LiveServerBadge ip={server.ip_address} edition={server.edition} />
+              )}
               <span className="text-gray-400 text-sm uppercase tracking-wider border border-gray-800 px-3 py-1 bg-charcoal">
                 {server.edition}
               </span>
               <span className="text-gray-400 text-sm uppercase tracking-wider border border-gray-800 px-3 py-1 bg-charcoal">
                 {server.geo_region.toUpperCase()}
-              </span>
-              <span className="text-primary text-sm font-bold uppercase tracking-wider border border-primary/50 px-3 py-1 bg-primary/10">
-                {server.votes} Votes
               </span>
               {server.category_tags.map(tag => (
                 <span key={tag} className="text-gray-500 text-xs uppercase tracking-wider border border-gray-800 px-2 py-1">
@@ -65,6 +69,10 @@ export default async function ServerPage({ params }: { params: Promise<{ slug: s
                 </span>
               ))}
             </div>
+          </div>
+          
+          <div className="flex-shrink-0 w-full md:w-auto">
+            <DetailedVoteButtons serverId={server.id} initialVotes={server.votes} />
           </div>
         </div>
 

@@ -4,7 +4,7 @@
   --color-charcoal: #121212;
   --color-card: #1E1E1E;
   --color-primary: #22C55E;
-  --color-featured: #F59E0B;
+  --color-featured: #10B981; /* emerald green */
   --color-gray-800: #1F2937;
   
   --color-background: var(--color-charcoal);
