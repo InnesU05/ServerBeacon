@@ -183,6 +183,26 @@ export default function AdvertiseForm() {
           </div>
         </div>
 
+        <div className="bg-charcoal/50 border border-yellow-500/20 p-4 rounded-md">
+          <label className="flex items-start space-x-3 cursor-pointer group">
+            <div className="flex items-center h-5 mt-1">
+              <input 
+                type="checkbox" 
+                name="wants_featured" 
+                className="w-5 h-5 accent-yellow-500 bg-charcoal border-gray-600 rounded cursor-pointer"
+              />
+            </div>
+            <div className="text-sm">
+              <span className="font-bold text-yellow-500 block text-base group-hover:text-yellow-400 transition-colors">
+                Do you want to be added to featured servers? - £20/Week
+              </span>
+              <span className="text-gray-400 block mt-1">
+                You can absolutely submit your server for free! However, featured servers are pinned to the top of the directory with a gold border, bringing in significantly more clicks and players. Check this box if you're interested and we'll email you with details.
+              </span>
+            </div>
+          </label>
+        </div>
+
         <div className="pt-4">
           <button 
             type="submit" 

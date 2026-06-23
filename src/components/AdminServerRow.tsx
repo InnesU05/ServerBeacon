@@ -6,13 +6,14 @@ import { toggleFeatured, deleteServer, updateServer } from '@/actions/admin';
 
 export default function AdminServerRow({ server }: { server: Server }) {
   const [isEditing, setIsEditing] = useState(false);
+  const [isFeatured, setIsFeatured] = useState(server.is_featured);
 
   if (isEditing) {
     return (
       <form action={async (formData) => {
         await updateServer(formData);
         setIsEditing(false);
-      }} className={`bg-card border p-6 flex flex-col gap-4 ${server.is_featured ? 'border-featured bg-featured/5' : 'border-gray-800'}`}>
+      }} className={`bg-card border p-6 flex flex-col gap-4 ${isFeatured ? 'border-featured bg-featured/5' : 'border-gray-800'}`}>
         <div className="flex justify-between items-center mb-2">
           <h3 className="font-bold text-white text-lg uppercase tracking-wider">Editing: {server.name}</h3>
           <button type="button" onClick={() => setIsEditing(false)} className="text-gray-400 hover:text-white uppercase text-xs font-bold">Cancel</button>
@@ -90,7 +91,7 @@ export default function AdminServerRow({ server }: { server: Server }) {
   }
 
   return (
-    <div className={`bg-card border p-4 flex flex-col sm:flex-row justify-between items-center gap-4 ${server.is_featured ? 'border-featured bg-featured/5' : 'border-gray-800'}`}>
+    <div className={`bg-card border p-4 flex flex-col sm:flex-row justify-between items-center gap-4 ${isFeatured ? 'border-featured bg-featured/5' : 'border-gray-800'}`}>
       <div className="flex items-center gap-4 w-full sm:w-auto">
         <div className="w-12 h-12 bg-charcoal border border-gray-800 flex items-center justify-center shrink-0">
           <span className="text-gray-500 font-bold text-xs">{server.name.substring(0, 2).toUpperCase()}</span>
@@ -106,11 +107,14 @@ export default function AdminServerRow({ server }: { server: Server }) {
           Edit
         </button>
         
-        <form action={async (formData) => { await toggleFeatured(formData); }}>
+        <form action={async (formData) => {
+          setIsFeatured(!isFeatured);
+          await toggleFeatured(formData);
+        }}>
           <input type="hidden" name="id" value={server.id} />
-          <input type="hidden" name="currentState" value={server.is_featured.toString()} />
-          <button type="submit" className={`px-4 py-2 text-xs font-bold uppercase tracking-wider border ${server.is_featured ? 'bg-featured text-black border-featured' : 'bg-transparent text-featured border-featured hover:bg-featured/10'}`}>
-            {server.is_featured ? '★ Featured' : 'Make Featured'}
+          <input type="hidden" name="currentState" value={isFeatured.toString()} />
+          <button type="submit" className={`px-4 py-2 text-xs font-bold uppercase tracking-wider border transition-colors ${isFeatured ? 'bg-featured text-black border-featured hover:bg-yellow-400' : 'bg-transparent text-featured border-featured hover:bg-featured/10'}`}>
+            {isFeatured ? '★ Featured' : 'Make Featured'}
           </button>
         </form>
         

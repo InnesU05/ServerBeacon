@@ -43,6 +43,7 @@ export async function submitServerAction(formData: FormData) {
     const logo_url = formData.get('logo_url') as string;
     const edition = formData.get('edition') as string;
     const geo_region = formData.get('geo_region') as string;
+    const wants_featured = formData.get('wants_featured') === 'on';
     
     // Parse tags safely
     let category_tags: string[] = [];
@@ -68,6 +69,7 @@ export async function submitServerAction(formData: FormData) {
       edition: edition as any || 'java',
       geo_region: geo_region || 'us',
       category_tags,
+      wants_featured,
       status: 'pending'
     };
 

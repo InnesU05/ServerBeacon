@@ -30,5 +30,6 @@ export type ServerSubmission = {
   geo_region: string;
   category_tags: string[];
   status: 'pending' | 'approved' | 'rejected';
+  wants_featured?: boolean;
   created_at: string;
 };

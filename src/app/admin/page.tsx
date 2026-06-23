@@ -72,7 +72,14 @@ export default async function AdminPage() {
             {submissions?.map(sub => (
               <div key={sub.id} className="bg-card border border-gray-800 p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                 <div>
-                  <h3 className="text-xl font-bold text-white">{sub.name} <span className="text-gray-500 text-sm ml-2">({sub.ip_address})</span></h3>
+                  <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                    {sub.name} <span className="text-gray-500 text-sm ml-2">({sub.ip_address})</span>
+                    {sub.wants_featured && (
+                      <span className="bg-yellow-500/20 text-yellow-500 text-xs px-2 py-1 rounded border border-yellow-500/50 uppercase tracking-wider font-bold">
+                        Wants Featured
+                      </span>
+                    )}
+                  </h3>
                   <p className="text-gray-400 text-sm mb-2">{sub.email} • {sub.edition.toUpperCase()} • {sub.geo_region.toUpperCase()}</p>
                   <p className="text-gray-300 text-sm line-clamp-2 max-w-2xl">{sub.description}</p>
                 </div>
