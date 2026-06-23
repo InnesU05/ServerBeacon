@@ -13,6 +13,9 @@ export default function Navigation() {
             </Link>
           </div>
           <div className="flex items-center space-x-4">
+            <Link href="/" className="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium">
+              All Servers
+            </Link>
             <Link href="/category/survival" className="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium">
               Survival
             </Link>
