@@ -106,7 +106,7 @@ export default function AdminServerRow({ server }: { server: Server }) {
           Edit
         </button>
         
-        <form action={toggleFeatured}>
+        <form action={async (formData) => { await toggleFeatured(formData); }}>
           <input type="hidden" name="id" value={server.id} />
           <input type="hidden" name="currentState" value={server.is_featured.toString()} />
           <button type="submit" className={`px-4 py-2 text-xs font-bold uppercase tracking-wider border ${server.is_featured ? 'bg-featured text-black border-featured' : 'bg-transparent text-featured border-featured hover:bg-featured/10'}`}>
@@ -114,7 +114,7 @@ export default function AdminServerRow({ server }: { server: Server }) {
           </button>
         </form>
         
-        <form action={deleteServer}>
+        <form action={async (formData) => { await deleteServer(formData); }}>
           <input type="hidden" name="id" value={server.id} />
           <button type="submit" className="px-4 py-2 text-xs font-bold uppercase tracking-wider bg-transparent text-red-500 border border-red-500/50 hover:bg-red-500/10">
             Delete
