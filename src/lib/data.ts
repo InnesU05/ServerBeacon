@@ -5,6 +5,7 @@ export async function getServers(): Promise<Server[]> {
   const { data, error } = await supabase
     .from('servers')
     .select('*')
+    .order('is_featured', { ascending: false })
     .order('votes', { ascending: false })
     .order('created_at', { ascending: false });
     
@@ -29,6 +30,7 @@ export async function getServersByEdition(edition: string): Promise<Server[]> {
     .from('servers')
     .select('*')
     .in('edition', [edition, 'crossplay'])
+    .order('is_featured', { ascending: false })
     .order('votes', { ascending: false })
     .order('created_at', { ascending: false });
     

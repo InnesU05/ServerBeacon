@@ -1,5 +1,6 @@
 import ServerCard from '@/components/ServerCard';
 import { getServers, getServersByEdition } from '@/lib/data';
+import Link from 'next/link';
 
 export default async function Home({
   searchParams,
@@ -15,7 +16,6 @@ export default async function Home({
     : await getServers();
 
   const featuredServers = allServers.filter(s => s.is_featured);
-  const standardServers = allServers.filter(s => !s.is_featured);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -28,7 +28,7 @@ export default async function Home({
         </p>
       </div>
 
-      {featuredServers.length > 0 && (
+      {featuredServers.length > 0 && !editionParam && (
         <div className="mb-16">
           <div className="flex items-center mb-6 border-b border-gray-800 pb-4">
             <h2 className="text-xl sm:text-2xl font-bold text-featured uppercase tracking-wider flex items-center">
@@ -49,18 +49,39 @@ export default async function Home({
       )}
 
       <div>
-        <div className="flex items-center mb-6 border-b border-gray-800 pb-4 justify-between">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4 border-b border-gray-800 pb-6">
           <h2 className="text-xl sm:text-2xl font-bold text-white uppercase tracking-wider flex items-center">
             <span className="w-3 h-3 bg-gray-600 mr-3 block"></span>
-            {editionParam ? `${editionParam.toUpperCase()} SERVERS` : 'ALL SERVERS'}
+            SERVER DIRECTORY
           </h2>
-          <span className="text-gray-500 text-sm font-bold tracking-wider hidden sm:block">SORTED BY VOTES</span>
+          
+          {/* Filter Bar */}
+          <div className="flex bg-charcoal border border-gray-800 w-full sm:w-auto">
+            <Link 
+              href="/"
+              className={`flex-1 sm:flex-none px-6 py-2 text-sm font-bold uppercase tracking-wider text-center border-r border-gray-800 transition-none ${!editionParam ? 'bg-primary text-black' : 'text-gray-400 hover:text-white hover:bg-gray-800'}`}
+            >
+              All
+            </Link>
+            <Link 
+              href="/?edition=java"
+              className={`flex-1 sm:flex-none px-6 py-2 text-sm font-bold uppercase tracking-wider text-center border-r border-gray-800 transition-none ${editionParam === 'java' ? 'bg-primary text-black' : 'text-gray-400 hover:text-white hover:bg-gray-800'}`}
+            >
+              Java
+            </Link>
+            <Link 
+              href="/?edition=bedrock"
+              className={`flex-1 sm:flex-none px-6 py-2 text-sm font-bold uppercase tracking-wider text-center transition-none ${editionParam === 'bedrock' ? 'bg-primary text-black' : 'text-gray-400 hover:text-white hover:bg-gray-800'}`}
+            >
+              Bedrock
+            </Link>
+          </div>
         </div>
         
         {/* Vertical List Container for All Servers */}
         <div className="flex flex-col gap-6">
-          {standardServers.length > 0 ? (
-            standardServers.map(server => (
+          {allServers.length > 0 ? (
+            allServers.map(server => (
               <ServerCard key={server.id} server={server} />
             ))
           ) : (

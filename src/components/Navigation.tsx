@@ -12,19 +12,13 @@ export default function Navigation() {
               </span>
             </Link>
           </div>
-          <div className="flex items-center space-x-4">
-            <Link href="/" className="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium">
-              All Servers
-            </Link>
-            <Link href="/?edition=java" className="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium">
-              Java
-            </Link>
-            <Link href="/?edition=bedrock" className="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium">
-              Bedrock
+          <div className="flex items-center space-x-6">
+            <Link href="/" className="text-gray-300 hover:text-white px-3 py-2 text-sm font-bold uppercase tracking-wider">
+              Directory
             </Link>
             <Link 
               href="/advertise" 
-              className="bg-primary text-black font-bold px-4 py-2 text-sm border border-primary hover:bg-transparent hover:text-primary transition-none"
+              className="bg-primary text-black font-bold px-4 py-2 text-sm border border-primary hover:bg-transparent hover:text-primary transition-none uppercase tracking-wider"
             >
               Advertise
             </Link>
