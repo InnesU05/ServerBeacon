@@ -1,30 +1,23 @@
 'use client';
 
 import { useState } from 'react';
-import { supabase } from '@/lib/supabase';
+import { submitServerAction } from '@/actions/submitServer';
 
 export default function AdvertiseForm() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setStatus('loading');
+    setErrorMessage('');
     
     const formData = new FormData(e.currentTarget);
-    const data = {
-      name: formData.get('name') as string,
-      email: formData.get('email') as string,
-      description: formData.get('description') as string,
-      category: formData.get('category') as string,
-      location: formData.get('location') as string,
-      discord_link: formData.get('discord') as string,
-      image_url: formData.get('image') as string,
-    };
+    const result = await submitServerAction(formData);
 
-    const { error } = await supabase.from('submissions').insert([data]);
-
-    if (error) {
-      console.error('Submission error:', error);
+    if (!result.success) {
+      console.error('Submission error:', result.error);
+      setErrorMessage(result.error || 'An unexpected error occurred.');
       setStatus('error');
     } else {
       setStatus('success');
@@ -44,7 +37,7 @@ export default function AdvertiseForm() {
 
       {status === 'error' && (
         <div className="bg-red-500/10 border border-red-500 text-red-500 p-4 mb-6 font-bold">
-          An error occurred. Please try again later.
+          {errorMessage || 'An error occurred. Please try again later.'}
         </div>
       )}
 
