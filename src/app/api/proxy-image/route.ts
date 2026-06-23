@@ -8,6 +8,24 @@ export async function GET(request: Request) {
     return new NextResponse('Missing URL parameter', { status: 400 });
   }
 
+  let parsedUrl;
+  try {
+    parsedUrl = new URL(url);
+  } catch (e) {
+    return new NextResponse('Invalid URL parameter', { status: 400 });
+  }
+
+  // Prevent SSRF by ensuring the protocol is strictly HTTP/HTTPS
+  if (parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:') {
+    return new NextResponse('Invalid protocol', { status: 400 });
+  }
+
+  // Prevent SSRF against localhost or local network IPs
+  const forbiddenHosts = ['localhost', '127.0.0.1', '0.0.0.0', '::1'];
+  if (forbiddenHosts.includes(parsedUrl.hostname) || parsedUrl.hostname.endsWith('.local')) {
+    return new NextResponse('Invalid host', { status: 400 });
+  }
+
   try {
     const res = await fetch(url, {
       headers: {
