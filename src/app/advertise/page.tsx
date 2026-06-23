@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import AdvertiseForm from '@/components/AdvertiseForm';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Advertise Your Minecraft Server | ServerBeacon',
@@ -9,6 +10,10 @@ export const metadata: Metadata = {
 export default function AdvertisePage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <Link href="/" className="inline-flex items-center text-gray-400 hover:text-white transition-colors mb-8 font-bold uppercase tracking-widest text-xs group">
+        <span className="mr-2 group-hover:-translate-x-1 transition-transform">←</span> Back to Directory
+      </Link>
+      
       <div className="mb-12 text-center">
         <h1 className="text-4xl font-bold text-white mb-4 uppercase tracking-tight">Advertise</h1>
         <p className="text-xl text-gray-400 max-w-2xl mx-auto">

@@ -56,6 +56,10 @@ export default async function ServerPage({ params }: { params: Promise<{ slug: s
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <Link href="/" className="inline-flex items-center text-gray-400 hover:text-white transition-colors mb-8 font-bold uppercase tracking-widest text-xs group">
+        <span className="mr-2 group-hover:-translate-x-1 transition-transform">←</span> Back to Directory
+      </Link>
+
       <div className="bg-card border border-gray-800 mb-8 overflow-hidden">
         
         {/* Promotional Banner (if provided in database) */}
