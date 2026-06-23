@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   return {
     title: `${server.name} - Minecraft Server | ServerBeacon`,
-    description: `${server.description.substring(0, 150)}... Join ${server.name} today! View Discord details, location, and category information.`,
+    description: `${server.description.substring(0, 150)}... Join ${server.name} today! View Discord details, IP, and voting information.`,
   };
 }
 
@@ -50,13 +50,19 @@ export default async function ServerPage({ params }: { params: Promise<{ slug: s
             </div>
             
             <div className="flex flex-wrap items-center gap-3 mt-4">
-              <Link href={`/location/${server.geo_region}`} className="text-gray-400 hover:text-white text-sm uppercase tracking-wider border border-gray-800 px-3 py-1 hover:border-gray-600 transition-none">
+              <span className="text-gray-400 text-sm uppercase tracking-wider border border-gray-800 px-3 py-1 bg-charcoal">
+                {server.edition}
+              </span>
+              <span className="text-gray-400 text-sm uppercase tracking-wider border border-gray-800 px-3 py-1 bg-charcoal">
                 {server.geo_region.toUpperCase()}
-              </Link>
+              </span>
+              <span className="text-primary text-sm font-bold uppercase tracking-wider border border-primary/50 px-3 py-1 bg-primary/10">
+                {server.votes} Votes
+              </span>
               {server.category_tags.map(tag => (
-                <Link key={tag} href={`/category/${tag}`} className="text-gray-400 hover:text-white text-sm uppercase tracking-wider border border-gray-800 px-3 py-1 hover:border-gray-600 transition-none">
+                <span key={tag} className="text-gray-500 text-xs uppercase tracking-wider border border-gray-800 px-2 py-1">
                   {tag}
-                </Link>
+                </span>
               ))}
             </div>
           </div>
@@ -78,9 +84,15 @@ export default async function ServerPage({ params }: { params: Promise<{ slug: s
               JOIN DISCORD
             </a>
           )}
-          <div className="flex-1 bg-charcoal text-white text-center font-bold text-lg py-4 border border-gray-800 hover:border-white transition-none cursor-pointer flex items-center justify-center">
-            COPY IP: PLAY.{server.slug.toUpperCase()}.NET
-          </div>
+          {server.ip_address ? (
+            <div className="flex-1 bg-charcoal text-white text-center font-bold text-lg py-4 border border-gray-600 hover:border-white transition-none flex items-center justify-center">
+              IP: {server.ip_address}
+            </div>
+          ) : (
+            <div className="flex-1 bg-charcoal text-gray-500 text-center font-bold text-lg py-4 border border-gray-800 flex items-center justify-center">
+              IP NOT PROVIDED
+            </div>
+          )}
         </div>
       </div>
     </div>
