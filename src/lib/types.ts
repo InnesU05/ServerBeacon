@@ -14,4 +14,21 @@ export type Server = {
   edition: ServerEdition;
   votes: number;
   is_featured: boolean;
+  created_at?: string;
+};
+
+export type ServerSubmission = {
+  id: string;
+  email: string;
+  name: string;
+  description: string;
+  ip_address: string;
+  discord_link?: string;
+  image_url?: string;
+  logo_url?: string;
+  edition: ServerEdition;
+  geo_region: string;
+  category_tags: string[];
+  status: 'pending' | 'approved' | 'rejected';
+  created_at: string;
 };

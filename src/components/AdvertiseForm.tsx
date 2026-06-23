@@ -13,6 +13,15 @@ export default function AdvertiseForm() {
     setErrorMessage('');
     
     const formData = new FormData(e.currentTarget);
+    
+    // We need to pass category_tags as a JSON string for the action
+    const category = formData.get('category_tags_input') as string;
+    if (category) {
+      formData.set('category_tags', JSON.stringify([category]));
+    } else {
+      formData.set('category_tags', JSON.stringify([]));
+    }
+    
     const result = await submitServerAction(formData);
 
     if (!result.success) {
@@ -55,16 +64,28 @@ export default function AdvertiseForm() {
             />
           </div>
           <div>
-            <label htmlFor="email" className="block text-white font-bold text-sm mb-2 uppercase tracking-wide">Contact Email *</label>
+            <label htmlFor="ip_address" className="block text-white font-bold text-sm mb-2 uppercase tracking-wide">Server IP *</label>
             <input 
-              type="email" 
-              id="email" 
-              name="email"
+              type="text" 
+              id="ip_address" 
+              name="ip_address"
               required 
               className="w-full bg-charcoal border border-gray-800 text-white px-4 py-3 focus:outline-none focus:border-primary transition-none"
-              placeholder="admin@example.com"
+              placeholder="play.example.com"
             />
           </div>
+        </div>
+
+        <div>
+          <label htmlFor="email" className="block text-white font-bold text-sm mb-2 uppercase tracking-wide">Contact Email *</label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email"
+            required 
+            className="w-full bg-charcoal border border-gray-800 text-white px-4 py-3 focus:outline-none focus:border-primary transition-none"
+            placeholder="admin@example.com (For invoicing)"
+          />
         </div>
 
         <div>
@@ -79,33 +100,47 @@ export default function AdvertiseForm() {
           ></textarea>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
-            <label htmlFor="category" className="block text-white font-bold text-sm mb-2 uppercase tracking-wide">Primary Category *</label>
+            <label htmlFor="edition" className="block text-white font-bold text-sm mb-2 uppercase tracking-wide">Edition *</label>
             <select 
-              id="category" 
-              name="category"
+              id="edition" 
+              name="edition"
               required
               className="w-full bg-charcoal border border-gray-800 text-white px-4 py-3 focus:outline-none focus:border-primary transition-none appearance-none"
             >
-              <option value="">Select a category</option>
+              <option value="java">Java</option>
+              <option value="bedrock">Bedrock</option>
+              <option value="crossplay">Crossplay</option>
+            </select>
+          </div>
+          <div>
+            <label htmlFor="category_tags_input" className="block text-white font-bold text-sm mb-2 uppercase tracking-wide">Primary Tag *</label>
+            <select 
+              id="category_tags_input" 
+              name="category_tags_input"
+              required
+              className="w-full bg-charcoal border border-gray-800 text-white px-4 py-3 focus:outline-none focus:border-primary transition-none appearance-none"
+            >
+              <option value="">Select...</option>
               <option value="survival">Survival</option>
               <option value="skyblock">Skyblock</option>
               <option value="minigames">Minigames</option>
               <option value="factions">Factions</option>
               <option value="prison">Prison</option>
               <option value="creative">Creative</option>
+              <option value="rpg">RPG</option>
             </select>
           </div>
           <div>
-            <label htmlFor="location" className="block text-white font-bold text-sm mb-2 uppercase tracking-wide">Location *</label>
+            <label htmlFor="geo_region" className="block text-white font-bold text-sm mb-2 uppercase tracking-wide">Region *</label>
             <select 
-              id="location" 
-              name="location"
+              id="geo_region" 
+              name="geo_region"
               required
               className="w-full bg-charcoal border border-gray-800 text-white px-4 py-3 focus:outline-none focus:border-primary transition-none appearance-none"
             >
-              <option value="">Select a location</option>
+              <option value="">Select...</option>
               <option value="us">United States</option>
               <option value="eu">Europe</option>
               <option value="au">Australia</option>
@@ -114,25 +149,36 @@ export default function AdvertiseForm() {
           </div>
         </div>
 
+        <div>
+          <label htmlFor="discord_link" className="block text-white font-bold text-sm mb-2 uppercase tracking-wide">Discord Invite Link</label>
+          <input 
+            type="url" 
+            id="discord_link" 
+            name="discord_link"
+            className="w-full bg-charcoal border border-gray-800 text-white px-4 py-3 focus:outline-none focus:border-primary transition-none"
+            placeholder="https://discord.gg/..."
+          />
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label htmlFor="discord" className="block text-white font-bold text-sm mb-2 uppercase tracking-wide">Discord Link</label>
+            <label htmlFor="image_url" className="block text-white font-bold text-sm mb-2 uppercase tracking-wide">Promo Banner URL</label>
             <input 
               type="url" 
-              id="discord" 
-              name="discord"
+              id="image_url" 
+              name="image_url"
               className="w-full bg-charcoal border border-gray-800 text-white px-4 py-3 focus:outline-none focus:border-primary transition-none"
-              placeholder="https://discord.gg/..."
+              placeholder="Direct image link (1500x500)"
             />
           </div>
           <div>
-            <label htmlFor="image" className="block text-white font-bold text-sm mb-2 uppercase tracking-wide">Image URL</label>
+            <label htmlFor="logo_url" className="block text-white font-bold text-sm mb-2 uppercase tracking-wide">Custom Logo URL</label>
             <input 
               type="url" 
-              id="image" 
-              name="image"
+              id="logo_url" 
+              name="logo_url"
               className="w-full bg-charcoal border border-gray-800 text-white px-4 py-3 focus:outline-none focus:border-primary transition-none"
-              placeholder="https://..."
+              placeholder="Direct image link (Square)"
             />
           </div>
         </div>
@@ -143,7 +189,7 @@ export default function AdvertiseForm() {
             disabled={status === 'loading'}
             className="w-full bg-primary text-black font-bold text-lg py-4 border border-primary hover:bg-transparent hover:text-primary transition-none disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {status === 'loading' ? 'SUBMITTING...' : 'SUBMIT SERVER FOR REVIEW (£20/WEEK)'}
+            {status === 'loading' ? 'SUBMITTING...' : 'SUBMIT SERVER FOR REVIEW'}
           </button>
         </div>
       </form>

@@ -1,15 +1,17 @@
 'use server';
 
 import { supabase } from '@/lib/supabase';
+import { ServerSubmission } from '@/lib/types';
 import { Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
-import { headers } from 'next/headers';
+import { headers, cookies } from 'next/headers';
 
-// Create a new ratelimiter, that allows 3 requests per 1 hour
-// Fallback to a dummy object if environment variables are not set during build time
-const ratelimit = process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN
+const redisUrl = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
+const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
+
+const ratelimit = redisUrl && redisToken
   ? new Ratelimit({
-      redis: Redis.fromEnv(),
+      redis: new Redis({ url: redisUrl, token: redisToken }),
       limiter: Ratelimit.slidingWindow(3, '1 h'),
       analytics: true,
     })
@@ -17,46 +19,70 @@ const ratelimit = process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDI
 
 export async function submitServerAction(formData: FormData) {
   try {
-    // 1. Rate Limiting Check
+    // Client Cookie check
+    const cookieStore = await cookies();
+    if (cookieStore.get('recent_submission')) {
+      return { success: false, error: 'You have recently submitted a server. Please wait before submitting again.' };
+    }
+
     if (ratelimit) {
       const headersList = await headers();
-      const ip = headersList.get('x-forwarded-for') || '127.0.0.1';
-      
-      const { success } = await ratelimit.limit(`ratelimit_submission_${ip}`);
+      const ip = (headersList.get('x-forwarded-for') || '127.0.0.1').split(',')[0].trim();
+      const { success } = await ratelimit.limit(`submission_${ip}`);
       if (!success) {
-        return { 
-          success: false, 
-          error: 'You have exceeded the maximum number of submissions. Please try again later.' 
-        };
+        return { success: false, error: 'Rate limit exceeded. Please try again later.' };
       }
     }
 
-    // 2. Data Parsing
-    const data = {
-      name: formData.get('name') as string,
-      email: formData.get('email') as string,
-      description: formData.get('description') as string,
-      category: formData.get('category') as string,
-      location: formData.get('location') as string,
-      discord_link: formData.get('discord') as string,
-      image_url: formData.get('image') as string,
-    };
+    const email = formData.get('email') as string;
+    const name = formData.get('name') as string;
+    const ip_address = formData.get('ip_address') as string;
+    const description = formData.get('description') as string;
+    const discord_link = formData.get('discord_link') as string;
+    const image_url = formData.get('image_url') as string;
+    const logo_url = formData.get('logo_url') as string;
+    const edition = formData.get('edition') as string;
+    const geo_region = formData.get('geo_region') as string;
+    
+    // Parse tags safely
+    let category_tags: string[] = [];
+    try {
+      const tagsString = formData.get('category_tags') as string;
+      category_tags = tagsString ? JSON.parse(tagsString) : [];
+    } catch (e) {
+      category_tags = ['survival'];
+    }
 
-    // Basic validation
-    if (!data.name || !data.email || !data.description || !data.category || !data.location) {
+    if (!email || !name || !ip_address || !description) {
       return { success: false, error: 'Missing required fields.' };
     }
 
-    // 3. Database Insertion
-    const { error } = await supabase.from('submissions').insert([data]);
+    const submission: Omit<ServerSubmission, 'id' | 'created_at'> = {
+      email,
+      name,
+      ip_address,
+      description,
+      discord_link: discord_link || undefined,
+      image_url: image_url || undefined,
+      logo_url: logo_url || undefined,
+      edition: edition as any || 'java',
+      geo_region: geo_region || 'us',
+      category_tags,
+      status: 'pending'
+    };
+
+    const { error } = await supabase
+      .from('server_submissions')
+      .insert([submission]);
 
     if (error) {
       console.error('Database insertion error:', error);
-      return { success: false, error: 'Failed to submit to database. Please try again.' };
+      return { success: false, error: 'Failed to submit application. Please try again.' };
     }
 
-    return { success: true };
+    cookieStore.set('recent_submission', 'true', { maxAge: 60 * 60 }); // 1 hour lockout
 
+    return { success: true };
   } catch (error) {
     console.error('Server action error:', error);
     return { success: false, error: 'An unexpected error occurred.' };
