@@ -16,11 +16,11 @@ export default function Navigation() {
             <Link href="/" className="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium">
               All Servers
             </Link>
-            <Link href="/category/survival" className="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium">
-              Survival
+            <Link href="/?edition=java" className="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium">
+              Java
             </Link>
-            <Link href="/category/skyblock" className="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium">
-              Skyblock
+            <Link href="/?edition=bedrock" className="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium">
+              Bedrock
             </Link>
             <Link 
               href="/advertise" 

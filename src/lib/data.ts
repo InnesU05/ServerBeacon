@@ -1,8 +1,13 @@
-import { Server } from '@/components/ServerCard';
+import { Server } from './types';
 import { supabase } from './supabase';
 
 export async function getServers(): Promise<Server[]> {
-  const { data, error } = await supabase.from('servers').select('*').order('created_at', { ascending: false });
+  const { data, error } = await supabase
+    .from('servers')
+    .select('*')
+    .order('votes', { ascending: false })
+    .order('created_at', { ascending: false });
+    
   if (error) {
     console.error('Error fetching servers:', error);
     return [];
@@ -19,19 +24,16 @@ export async function getServerBySlug(slug: string): Promise<Server | null> {
   return data as Server;
 }
 
-export async function getServersByCategory(category: string): Promise<Server[]> {
-  const { data, error } = await supabase.from('servers').select('*').contains('category_tags', [category]).order('created_at', { ascending: false });
+export async function getServersByEdition(edition: string): Promise<Server[]> {
+  const { data, error } = await supabase
+    .from('servers')
+    .select('*')
+    .in('edition', [edition, 'crossplay'])
+    .order('votes', { ascending: false })
+    .order('created_at', { ascending: false });
+    
   if (error) {
-    console.error(`Error fetching servers for category ${category}:`, error);
-    return [];
-  }
-  return data as Server[];
-}
-
-export async function getServersByLocation(location: string): Promise<Server[]> {
-  const { data, error } = await supabase.from('servers').select('*').eq('geo_region', location).order('created_at', { ascending: false });
-  if (error) {
-    console.error(`Error fetching servers for location ${location}:`, error);
+    console.error(`Error fetching servers for edition ${edition}:`, error);
     return [];
   }
   return data as Server[];
